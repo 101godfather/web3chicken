@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>鸡哥的世界</title>
 
   <style>
@@ -539,6 +539,33 @@
 	}
 	
 	:root[data-theme="light"] .tileDesc{ opacity: 1; }
+
+    /* 假设你的卡片容器叫 .tiles 或 .grid */
+    .tiles{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    
+    /* 手机：1列；大一点的手机：2列 */
+    @media (max-width: 560px){
+      .tiles{ grid-template-columns: 1fr; }
+    }
+    @media (min-width: 561px) and (max-width: 900px){
+      .tiles{ grid-template-columns: repeat(2, 1fr); }
+    }
+    
+	.container{
+	  max-width: 1100px;
+	  margin: 0 auto;
+	  padding: 0 16px;
+	}
+    /* 让“欢迎来到鸡哥的世界...”远离上方分界线 */
+    .kicker{
+      margin-top: 14px;     /* 往下挪：你想更大就 18/22 */
+      padding-top: 8px;     /* 额外留白：可选 */
+      line-height: 1.6;     /* 行距更舒服：可选 */
+    }
 
   </style>
 </head>
