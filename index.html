@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>鸡哥的世界</title>
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: rgba(0,0,0,.10);
+      --card: #f5f5f7;
+      --link: #0066cc;
+      --btn: #0071e3;
+      --btnHover: #0077ed;
+      --radius: 22px;
+      --shadow: 0 18px 60px rgba(0,0,0,.08);
+      --shadow2: 0 10px 30px rgba(0,0,0,.08);
+      --max: 1120px;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display","SF Pro Text",
+                   "Segoe UI", Roboto, Helvetica, Arial, "PingFang SC","Hiragino Sans GB",
+                   "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a{ color: var(--link); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    /* Nav */
+    .navWrap{
+      position: sticky;
+      top:0;
+      z-index: 50;
+      backdrop-filter: saturate(180%) blur(18px);
+      background: rgba(255,255,255,.78);
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .nav{
+      max-width: var(--max);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 150px;
+    }
+
+    /* Left top logo as chicken image */
+    .logoWrap{
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.20);
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+    }
+    .logoImg{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand span{
+      font-weight: 600;
+      letter-spacing: .2px;
+      font-size: 14px;
+    }
+
+    .navLinks{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+      font-size: 13px;
+    }
+    .navLinks a{ color: var(--text); opacity:.82; }
+    .navLinks a:hover{ opacity:1; text-decoration:none; }
+
+    /* Nav title bigger but not exceed divider line */
+    .navTitle{
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .navActions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      min-width: 150px;
+      justify-content: flex-end;
+    }
+    .iconBtn{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.8);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color: inherit;
+    }
+    .iconBtn:hover{ background: rgba(255,255,255,1); }
+    .burger{ display:none; }
+
+    /* Layout */
+    .container{ max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+    /* Hero (single-screen page) */
+    .hero{
+      min-height: calc(100vh - 92px);
+      padding: 72px 0 32px;
+      text-align:center;
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .kicker{
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: .2px;
+      margin-bottom: 10px;
+    }
+    .hero p{
+      margin: 16px auto 0;
+      max-width: 720px;
+      font-size: clamp(16px, 1.5vw, 20px);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .heroVisual{
+      margin: 34px auto 0;
+      width: 100%;
+      max-width: 980px;
+      border-radius: var(--radius);
+      background: radial-gradient(circle at 20% 10%, rgba(0,122,255,.25), transparent 45%),
+                  radial-gradient(circle at 80% 0%, rgba(255,45,85,.18), transparent 40%),
+                  radial-gradient(circle at 30% 90%, rgba(88,86,214,.18), transparent 45%),
+                  linear-gradient(180deg, #f5f5f7 0%, #ffffff 75%);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position: relative;
+      aspect-ratio: 16/9;
+    }
+    .heroVisual .glowLine{
+      position:absolute;
+      inset: -40% -20% auto -20%;
+      height: 60%;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,.06), transparent);
+      transform: rotate(-10deg);
+      animation: sweep 6s linear infinite;
+      opacity: .75;
+    }
+    @keyframes sweep{
+      0%{ transform: translateX(-30%) rotate(-10deg); }
+      100%{ transform: translateX(60%) rotate(-10deg); }
+    }
+    .heroVisual .label{
+      position:absolute;
+      left: 18px;
+      top: 18px;
+      font-size: 12px;
+      color: rgba(29,29,31,.75);
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(0,0,0,.08);
+      padding: 8px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      z-index: 3;
+    }
+
+    /* ====== Insertable Image Link Panel (inside the frame) ====== */
+    .linkPanel{
+      position:absolute;
+      left: 50%;
+      top: 52%;
+      width: min(86%, 860px);
+      height: min(78%, 520px);
+      transform: translate(-50%, -50%);
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.78));
+      border: 1px solid rgba(0,0,0,.10);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      z-index: 2;
+      text-align: left;
+    }
+    .linkPanelHead{
+      height: 44px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.88);
+    
+      position: relative; /* 新增：给绝对居中用 */
+    }
+
+    .dots{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+    .dot{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.12);
+    }
+    .panelTitle{
+      position: absolute;   /* 新增 */
+      left: 50%;            /* 新增 */
+      transform: translateX(-50%);  /* 新增 */
+    
+      font-size: 12px;
+      color: rgba(29,29,31,.68);
+      font-weight: 600;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;       /* 建议加：避免太长压到两边 */
+      text-align: center;   /* 新增：文字居中 */
+    }
+    .linkPanelBody{
+      padding: 14px;
+      height: calc(100% - 44px);
+      overflow: auto;
+    }
+    .linkPanelBody::-webkit-scrollbar{ width: 10px; }
+    .linkPanelBody::-webkit-scrollbar-thumb{
+      background: rgba(0,0,0,.10);
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,0);
+      background-clip: padding-box;
+    }
+
+    .linkGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 860px){
+      .linkGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px){
+      .linkGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* ===========================
+       全部卡片：整卡背景图模式（你要的效果）
+       =========================== */
+    .linkTile{
+      position: relative;
+      display:block;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(245,245,247,.70);
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      color: inherit;
+      text-decoration: none;
+      min-height: 230px; /* 你可按需调高/调低 */
+    }
+    .linkTile:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.10);
+      border-color: rgba(0,113,227,.22);
+      text-decoration:none;
+    }
+    /* 全卡轻遮罩（让整体更统一，不一定必须） */
+    .linkTile::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,.06) 0%,
+        rgba(0,0,0,.22) 45%,
+        rgba(0,0,0,.35) 100%
+      );
+      z-index: 1;
+      pointer-events:none;
+    }
+    
+    /* 底部贴底黑边（关键：黑边一定靠底） */
+    .linkTile::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height: 0%;  /* 黑边高度：想更靠下就调小，想更厚就调大 */
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,.45) 45%,
+        rgba(0,0,0,.82) 100%
+      );
+      z-index: 2;
+      pointer-events:none;
+    }
+
+    /* 背景图：铺满整张卡片 */
+    .coverImg{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;      /* 填充整卡（会裁剪一点，但整体更高级） */
+      object-position: center;
+      transform: scale(1.03);
+      display:block;
+    }
+
+    /* 叠加渐变，保证文字可读 */
+    .linkTile::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg,
+          rgba(0,0,0,.06) 0%,
+          rgba(0,0,0,.40) 45%,
+          rgba(0,0,0,.78) 100%);
+      z-index: 1;
+    }
+
+    /* 文本内容层 */
+    .tileMeta{
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      z-index: 3;
+      padding: 15px 20px 20px;
+    
+      /* 关键：统一布局，避免每张卡不一致 */
+      margin-top: 0 !important;
+      background: none !important;
+    }
+
+
+    .tileTop{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .tileTitle{
+      margin:0;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+    .tileBadge{
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.35);
+      flex: 0 0 auto;
+    }
+    .tileDesc{
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.5;
+      max-height: 42px;
+      overflow:hidden;
+    }
+    .tileLinkRow{
+      margin-top: 10px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .tileLinkText{
+      font-size: 13px;
+      font-weight: 800;
+      color: #9bd1ff;
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+    }
+    .extIcon{
+      width: 14px; height: 14px;
+      flex: 0 0 auto;
+      opacity: .95;
+    }
+
+    /* Mobile */
+    @media (max-width: 860px){
+      .navLinks{ display:none; }
+      .burger{ display:grid; }
+    }
+
+    /* Simple mobile drawer */
+    .drawer{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.30);
+      backdrop-filter: blur(4px);
+      display:none;
+      z-index: 80;
+    }
+    .drawerPanel{
+      position:absolute;
+      top: 0; right: 0;
+      width: min(360px, 92vw);
+      height: 100%;
+      background: rgba(255,255,255,.92);
+      border-left: 1px solid rgba(0,0,0,.10);
+      padding: 14px;
+    }
+    .drawerHead{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      padding: 6px 2px 10px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .drawerHead strong{ font-size: 14px; }
+    .drawerLinks{ padding: 10px 2px; display:grid; }
+    .drawerLinks a{
+      padding: 12px 8px;
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .drawerLinks a:hover{ background: rgba(0,0,0,.05); text-decoration:none; }
+
+    /* Dark theme overrides */
+    :root[data-theme="dark"]{
+      --bg: #000;
+      --text: #f5f5f7;
+      --muted: rgba(245,245,247,.72);
+      --line: rgba(255,255,255,.14);
+      --card: rgba(255,255,255,.06);
+      --link: #4da3ff;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+    }
+    :root[data-theme="dark"] .navWrap{
+      background: rgba(0,0,0,.65);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    :root[data-theme="dark"] .iconBtn{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #f5f5f7;
+    }
+    :root[data-theme="dark"] .drawerPanel{
+      background: rgba(0,0,0,.78);
+      border-left: 1px solid rgba(255,255,255,.14);
+    }
+    :root[data-theme="dark"] .drawerHead{
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    :root[data-theme="dark"] .drawerLinks a{
+      color: #f5f5f7;
+    }
+    :root[data-theme="dark"] .heroVisual{
+      border: 1px solid rgba(255,255,255,.10);
+      background: radial-gradient(circle at 20% 10%, rgba(0,122,255,.25), transparent 45%),
+                  radial-gradient(circle at 80% 0%, rgba(255,45,85,.18), transparent 40%),
+                  radial-gradient(circle at 30% 90%, rgba(88,86,214,.18), transparent 45%),
+                  linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(0,0,0,1) 75%);
+    }
+    :root[data-theme="dark"] .logoWrap{
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    :root[data-theme="dark"] .linkPanel{
+      background: linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.56));
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    :root[data-theme="dark"] .linkPanelHead{
+      background: rgba(0,0,0,.60);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    :root[data-theme="dark"] .panelTitle{
+      color: rgba(245,245,247,.72);
+    }
+    :root[data-theme="dark"] .linkPanelBody::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.18);
+      background-clip: padding-box;
+    }
+
+    /* dark: make card border slightly visible */
+    :root[data-theme="dark"] .linkTile{
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    :root[data-theme="dark"] .linkTile:hover{
+      border-color: rgba(77,163,255,.30);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navWrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logoWrap" aria-hidden="true">
+          <img class="logoImg" src="IMG_6230.jpg" alt="鸡哥" />
+        </div>
+        <span>鸡哥</span>
+      </div>
+
+      <nav class="navLinks" aria-label="主导航">
+        <a class="navTitle" href="javascript:void(0)" onclick="toast('欢迎来到鸡哥的世界')">鸡哥的世界</a>
+      </nav>
+
+      <div class="navActions">
+        <button class="iconBtn" id="themeBtn" aria-label="切换主题">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M21 13.2A8 8 0 1 1 10.8 3a6.5 6.5 0 1 0 10.2 10.2Z"
+              stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="iconBtn burger" id="menuBtn" aria-label="打开菜单">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16M4 12h16M4 17h16"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="移动端菜单">
+    <div class="drawerPanel">
+      <div class="drawerHead">
+        <strong>菜单</strong>
+        <button class="iconBtn" id="closeDrawer" aria-label="关闭菜单">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 6l12 12M18 6 6 18"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawerLinks">
+        <a href="javascript:void(0)" onclick="toast('欢迎来到鸡哥的世界')">鸡哥的世界</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero container" id="highlights">
+     <div class="kicker">
+       欢迎来到鸡哥的世界，有不懂的请电报联系我：
+       <a
+         id="tgLink"
+         href="https://t.me/web3Chicken_brother"
+         target="_blank"
+         rel="noopener noreferrer"
+         data-tg="tg://resolve?domain=web3Chicken_brother"
+       >
+         @web3Chicken_brother
+       </a>
+     </div>
+
+
+      <p>
+        下方方框内支持“图片 + 文本”多链接跳转；点击整张卡片即可打开第三方网站。现在已改为：所有卡片封面铺满整卡背景图模式。
+      </p>
+
+      <div class="heroVisual" aria-label="链接展示方框（支持多链接跳转）">
+        <div class="glowLine" aria-hidden="true"></div>
+       
+
+        <div class="linkPanel" aria-label="图文链接面板">
+          <div class="linkPanelHead">
+            <div class="dots" aria-hidden="true">
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div class="panelTitle">鸡哥带你玩转web3 咯咯哒咯咯哒咯咯哒</div>
+          </div>
+
+          <div class="linkPanelBody">
+            <div class="linkGrid">
+
+              <!-- Link Tile 1 -->
+              <a class="linkTile" href="https://mitce.net/aff.php?aff=20032" target="_blank" rel="noopener noreferrer">
+                <img class="coverImg" src="photo_2026-01-16_17-54-13.jpg" alt="Mitce机场 封面">
+                <div class="tileMeta">
+                  <div class="tileTop">
+                    <h3 class="tileTitle">Mitce机场</h3>
+                    <span class="tileBadge">官网</span>
+                  </div>
+                  <p class="tileDesc">每月只需4元人民币</p>
+                  <div class="tileLinkRow">
+                    <span class="tileLinkText">
+                      立即访问
+                      <svg class="extIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14 5h5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 14 19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 10v9h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Link Tile 2 -->
+              <a class="linkTile" href="https://accounts.bmwweb.academy/register?ref=BNB886666" target="_blank" rel="noopener noreferrer">
+                <img class="coverImg" src="IMG_6266.jpg" alt="示例网站 2 封面">
+                <div class="tileMeta">
+                  <div class="tileTop">
+                    <h3 class="tileTitle">币安交易所</h3>
+                    <span class="tileBadge">官网</span>
+                  </div>
+                  <p class="tileDesc">全球第一大交易所</p>
+                  <div class="tileLinkRow">
+                    <span class="tileLinkText">
+                      立即访问
+                      <svg class="extIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14 5h5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 14 19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 10v9h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Link Tile 3 -->
+              <a class="linkTile" href="https://www.ouxyi.link/ul/a2sEcY?channelId=82567043" target="_blank" rel="noopener noreferrer">
+                <img class="coverImg" src="IMG_6275.jpg" alt="示例网站 3 封面">
+                <div class="tileMeta">
+                  <div class="tileTop">
+                    <h3 class="tileTitle">欧易交易所注册下载</h3>
+                    <span class="tileBadge">官网</span>
+                  </div>
+                  <p class="tileDesc">全球第二大交易所</p>
+                  <div class="tileLinkRow">
+                    <span class="tileLinkText">
+                      立即访问
+                      <svg class="extIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14 5h5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 14 19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 10v9h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 你要新增更多链接：复制任意一个 <a class="linkTile" ...> 块即可（注意封面图用 coverImg） -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // tiny toast
+    let toastTimer = null;
+    function toast(msg){
+      let t = document.getElementById("toast");
+      if(!t){
+        t = document.createElement("div");
+        t.id = "toast";
+        t.style.position = "fixed";
+        t.style.left = "50%";
+        t.style.bottom = "22px";
+        t.style.transform = "translateX(-50%)";
+        t.style.padding = "10px 14px";
+        t.style.borderRadius = "999px";
+        t.style.background = "rgba(29,29,31,.88)";
+        t.style.color = "#fff";
+        t.style.fontSize = "13px";
+        t.style.boxShadow = "0 14px 40px rgba(0,0,0,.22)";
+        t.style.backdropFilter = "blur(10px)";
+        t.style.zIndex = "120";
+        t.style.opacity = "0";
+        t.style.transition = "opacity .18s ease, transform .18s ease";
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = "1";
+      t.style.transform = "translateX(-50%) translateY(-2px)";
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        t.style.opacity = "0";
+        t.style.transform = "translateX(-50%) translateY(0)";
+      }, 1600);
+    }
+
+    // drawer
+    const drawer = document.getElementById("drawer");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeDrawer = document.getElementById("closeDrawer");
+
+    function openDrawer(){ if(drawer) drawer.style.display = "block"; }
+    function hideDrawer(){ if(drawer) drawer.style.display = "none"; }
+
+    if(menuBtn) menuBtn.addEventListener("click", openDrawer);
+    if(closeDrawer) closeDrawer.addEventListener("click", hideDrawer);
+    if(drawer) drawer.addEventListener("click", (e) => { if(e.target === drawer) hideDrawer(); });
+
+    // theme toggle (keep dark mode + localStorage)
+    (function themeToggle(){
+      const btn = document.getElementById("themeBtn");
+      if(!btn) return;
+
+      const KEY = "theme_pref";
+      const root = document.documentElement;
+
+      function apply(theme){
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem(KEY, theme);
+      }
+
+      const saved = localStorage.getItem(KEY);
+      if(saved){
+        apply(saved);
+      }else{
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        apply(prefersDark ? "dark" : "light");
+      }
+
+      btn.addEventListener("click", () => {
+        const now = root.getAttribute("data-theme") || "light";
+        apply(now === "dark" ? "light" : "dark");
+        toast(`已切换到 ${root.getAttribute("data-theme")} 模式`);
+      });
+    })();
+	// Prefer web first. Only fallback to Telegram App when the browser blocks opening the web page.
+	(function setupTelegramLink(){
+	  const a = document.getElementById("tgLink");
+	  if(!a) return;
+	
+	  const tgScheme = a.getAttribute("data-tg");  // tg://resolve?domain=...
+	  const httpsUrl  = a.getAttribute("href");    // https://t.me/...
+	
+	  a.addEventListener("click", (e) => {
+	    e.preventDefault();
+	
+	    // 1) Always try web first (new tab). This works for users without Telegram installed.
+	    const w = window.open(httpsUrl, "_blank", "noopener,noreferrer");
+	
+	    // 2) If popup/new-tab was blocked, fallback to app deep link.
+	    //    (Only happens in strict browsers / settings; doesn't disturb normal web opening.)
+	    if(!w){
+	      window.location.href = tgScheme;
+	    }
+	  }, { passive: false });
+	})();
+
+
+  </script>
+</body>
+</html>
