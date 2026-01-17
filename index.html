@@ -566,6 +566,23 @@
       padding-top: 8px;     /* 额外留白：可选 */
       line-height: 1.6;     /* 行距更舒服：可选 */
     }
+    /* 手机端：不要在“方框里滚动”，改成整页滚动显示全部链接 */
+    @media (max-width: 768px){
+      .heroVisual{ 
+        height: auto !important;
+        min-height: 0 !important;
+      }
+    
+      /* 关键：把内部滚动关掉 */
+      .linkPanelBody,
+      .links,
+      .tiles,
+      .tileGrid{
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+    }
 
   </style>
 </head>
