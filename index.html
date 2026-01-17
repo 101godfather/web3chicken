@@ -32,11 +32,12 @@
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
     a{ color: var(--link); text-decoration: none; }
     a:hover{ text-decoration: underline; }
 
-    /* Nav */
+    /* ===== Nav ===== */
     .navWrap{
       position: sticky;
       top:0;
@@ -60,8 +61,6 @@
       gap: 10px;
       min-width: 150px;
     }
-
-    /* Left top logo as chicken image */
     .logoWrap{
       width: 30px;
       height: 30px;
@@ -78,7 +77,6 @@
       object-fit: cover;
       display: block;
     }
-
     .brand span{
       font-weight: 600;
       letter-spacing: .2px;
@@ -94,7 +92,6 @@
     .navLinks a{ color: var(--text); opacity:.82; }
     .navLinks a:hover{ opacity:1; text-decoration:none; }
 
-    /* Nav title bigger but not exceed divider line */
     .navTitle{
       font-size: 15px;
       font-weight: 700;
@@ -120,14 +117,15 @@
       place-items:center;
       cursor:pointer;
       color: inherit;
+      -webkit-tap-highlight-color: transparent;
     }
     .iconBtn:hover{ background: rgba(255,255,255,1); }
     .burger{ display:none; }
 
-    /* Layout */
+    /* ===== Layout ===== */
     .container{ max-width: var(--max); margin: 0 auto; padding: 0 16px; }
 
-    /* Hero (single-screen page) */
+    /* ===== Hero ===== */
     .hero{
       min-height: calc(100vh - 92px);
       padding: 72px 0 32px;
@@ -141,6 +139,11 @@
       color: var(--muted);
       letter-spacing: .2px;
       margin-bottom: 10px;
+
+      /* 让文字远离分界线（你反馈“贴边”） */
+      margin-top: 14px;
+      padding-top: 8px;
+      line-height: 1.6;
     }
     .hero p{
       margin: 16px auto 0;
@@ -178,21 +181,8 @@
       0%{ transform: translateX(-30%) rotate(-10deg); }
       100%{ transform: translateX(60%) rotate(-10deg); }
     }
-    .heroVisual .label{
-      position:absolute;
-      left: 18px;
-      top: 18px;
-      font-size: 12px;
-      color: rgba(29,29,31,.75);
-      background: rgba(255,255,255,.65);
-      border: 1px solid rgba(0,0,0,.08);
-      padding: 8px 10px;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-      z-index: 3;
-    }
 
-    /* ====== Insertable Image Link Panel (inside the frame) ====== */
+    /* ===== Link Panel (Desktop: inside frame) ===== */
     .linkPanel{
       position:absolute;
       left: 50%;
@@ -217,10 +207,8 @@
       padding: 0 14px;
       border-bottom: 1px solid rgba(0,0,0,.06);
       background: rgba(255,255,255,.88);
-    
-      position: relative; /* 新增：给绝对居中用 */
+      position: relative;
     }
-
     .dots{
       display:flex;
       gap: 8px;
@@ -232,10 +220,9 @@
       background: rgba(0,0,0,.12);
     }
     .panelTitle{
-      position: absolute;   /* 新增 */
-      left: 50%;            /* 新增 */
-      transform: translateX(-50%);  /* 新增 */
-    
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 12px;
       color: rgba(29,29,31,.68);
       font-weight: 600;
@@ -243,13 +230,14 @@
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      max-width: 70%;       /* 建议加：避免太长压到两边 */
-      text-align: center;   /* 新增：文字居中 */
+      max-width: 70%;
+      text-align: center;
     }
     .linkPanelBody{
       padding: 14px;
       height: calc(100% - 44px);
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .linkPanelBody::-webkit-scrollbar{ width: 10px; }
     .linkPanelBody::-webkit-scrollbar-thumb{
@@ -271,9 +259,7 @@
       .linkGrid{ grid-template-columns: 1fr; }
     }
 
-    /* ===========================
-       全部卡片：整卡背景图模式（你要的效果）
-       =========================== */
+    /* ===== Card tiles ===== */
     .linkTile{
       position: relative;
       display:block;
@@ -285,7 +271,8 @@
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       color: inherit;
       text-decoration: none;
-      min-height: 230px; /* 你可按需调高/调低 */
+      min-height: 230px;
+      -webkit-tap-highlight-color: transparent;
     }
     .linkTile:hover{
       transform: translateY(-2px);
@@ -293,7 +280,20 @@
       border-color: rgba(0,113,227,.22);
       text-decoration:none;
     }
-    /* 全卡轻遮罩（让整体更统一，不一定必须） */
+
+    /* 背景图铺满 */
+    .coverImg{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.03);
+      display:block;
+    }
+
+    /* 叠加渐变，保证文字可读（只保留一份，不重复定义） */
     .linkTile::before{
       content:"";
       position:absolute;
@@ -301,66 +301,20 @@
       background: linear-gradient(
         180deg,
         rgba(0,0,0,.06) 0%,
-        rgba(0,0,0,.22) 45%,
-        rgba(0,0,0,.35) 100%
+        rgba(0,0,0,.40) 45%,
+        rgba(0,0,0,.78) 100%
       );
       z-index: 1;
       pointer-events:none;
     }
-    
-    /* 底部贴底黑边（关键：黑边一定靠底） */
-    .linkTile::after{
-      content:"";
-      position:absolute;
-      left:0; right:0; bottom:0;
-      height: 0%;  /* 黑边高度：想更靠下就调小，想更厚就调大 */
-      background: linear-gradient(
-        180deg,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,.45) 45%,
-        rgba(0,0,0,.82) 100%
-      );
-      z-index: 2;
-      pointer-events:none;
-    }
 
-    /* 背景图：铺满整张卡片 */
-    .coverImg{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;      /* 填充整卡（会裁剪一点，但整体更高级） */
-      object-position: center;
-      transform: scale(1.03);
-      display:block;
-    }
-
-    /* 叠加渐变，保证文字可读 */
-    .linkTile::before{
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg,
-          rgba(0,0,0,.06) 0%,
-          rgba(0,0,0,.40) 45%,
-          rgba(0,0,0,.78) 100%);
-      z-index: 1;
-    }
-
-    /* 文本内容层 */
     .tileMeta{
       position: absolute;
       left: 0; right: 0; bottom: 0;
       z-index: 3;
       padding: 15px 20px 20px;
-    
-      /* 关键：统一布局，避免每张卡不一致 */
-      margin-top: 0 !important;
-      background: none !important;
+      background: none;
     }
-
 
     .tileTop{
       display:flex;
@@ -416,13 +370,13 @@
       opacity: .95;
     }
 
-    /* Mobile */
+    /* ===== Mobile nav ===== */
     @media (max-width: 860px){
       .navLinks{ display:none; }
       .burger{ display:grid; }
     }
 
-    /* Simple mobile drawer */
+    /* ===== Drawer ===== */
     .drawer{
       position: fixed;
       inset: 0;
@@ -458,7 +412,7 @@
     }
     .drawerLinks a:hover{ background: rgba(0,0,0,.05); text-decoration:none; }
 
-    /* Dark theme overrides */
+    /* ===== Dark theme ===== */
     :root[data-theme="dark"]{
       --bg: #000;
       --text: #f5f5f7;
@@ -513,8 +467,6 @@
       background: rgba(255,255,255,.18);
       background-clip: padding-box;
     }
-
-    /* dark: make card border slightly visible */
     :root[data-theme="dark"] .linkTile{
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 12px 30px rgba(0,0,0,.35);
@@ -522,68 +474,68 @@
     :root[data-theme="dark"] .linkTile:hover{
       border-color: rgba(77,163,255,.30);
     }
-	:root[data-theme="light"] .tileTitle,
-	:root[data-theme="light"] .tileDesc,
-	:root[data-theme="light"] .tileLinkText{
-	  color: rgba(255,255,255,.92);
-	  text-shadow: 0 2px 10px rgba(0,0,0,.55);
-	}
-	
-	:root[data-theme="light"] .titleMeta{
-	  background: linear-gradient(
-	    180deg,
-	    rgba(0,0,0,0) 0%,
-	    rgba(0,0,0,.60) 45%,
-	    rgba(0,0,0,.88) 100%
-	  );
-	}
-	
-	:root[data-theme="light"] .tileDesc{ opacity: 1; }
 
-    /* 假设你的卡片容器叫 .tiles 或 .grid */
-    .tiles{
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+    /* ===== Light mode: 让卡片文字更清晰（你之前写错了 titleMeta -> tileMeta） ===== */
+    :root[data-theme="light"] .tileTitle,
+    :root[data-theme="light"] .tileDesc,
+    :root[data-theme="light"] .tileLinkText{
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 2px 10px rgba(0,0,0,.55);
     }
-    
-    /* 手机：1列；大一点的手机：2列 */
-    @media (max-width: 560px){
-      .tiles{ grid-template-columns: 1fr; }
-    }
-    @media (min-width: 561px) and (max-width: 900px){
-      .tiles{ grid-template-columns: repeat(2, 1fr); }
-    }
-    
-	.container{
-	  max-width: 1100px;
-	  margin: 0 auto;
-	  padding: 0 16px;
-	}
-    /* 让“欢迎来到鸡哥的世界...”远离上方分界线 */
-    .kicker{
-      margin-top: 14px;     /* 往下挪：你想更大就 18/22 */
-      padding-top: 8px;     /* 额外留白：可选 */
-      line-height: 1.6;     /* 行距更舒服：可选 */
-    }
-    /* 手机端：不要在“方框里滚动”，改成整页滚动显示全部链接 */
+
+    /* =========================================================
+       核心：手机端“同等全局展示”——只允许页面滚动，不允许方框内部滚动
+       ========================================================= */
     @media (max-width: 768px){
-      .heroVisual{ 
-        height: auto !important;
-        min-height: 0 !important;
+      html, body{ height: auto; min-height: 100%; }
+      body{ overflow-y: auto; }
+
+      /* Hero 不强制占满一整屏，让内容自然往下排 */
+      .hero{
+        min-height: auto;
+        padding: 28px 0 22px;
       }
-    
-      /* 关键：把内部滚动关掉 */
-      .linkPanelBody,
-      .links,
-      .tiles,
-      .tileGrid{
-        max-height: none !important;
-        height: auto !important;
-        overflow: visible !important;
+
+      /* 画框不要锁 16:9，否则手机永远像“一个固定方框” */
+      .heroVisual{
+        aspect-ratio: auto;
+        height: auto;
+        overflow: visible;
+        padding: 14px;
+      }
+
+      /* 面板从 absolute 变成正常文档流：宽度100%，高度由内容撑开 */
+      .linkPanel{
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 100%;
+        height: auto;
+        max-width: none;
+      }
+
+      /* 关键：关闭面板内部滚动，避免“方框里滑” */
+      .linkPanelBody{
+        height: auto;
+        overflow: visible;
+      }
+
+      /* 手机端 1 列卡片，更清晰、不会被挤扁 */
+      .linkGrid{
+        grid-template-columns: 1fr;
+      }
+
+      /* 卡片在手机端略矮一点，滚动更顺滑 */
+      .linkTile{
+        min-height: 200px;
+      }
+
+      /* 头部标题稍微小一点防止挤 */
+      .panelTitle{
+        max-width: 62%;
       }
     }
-
   </style>
 </head>
 
@@ -638,19 +590,18 @@
 
   <main>
     <section class="hero container" id="highlights">
-     <div class="kicker">
-       欢迎来到鸡哥的世界，有不懂的请电报联系我：
-       <a
-         id="tgLink"
-         href="https://t.me/web3Chicken_brother"
-         target="_blank"
-         rel="noopener noreferrer"
-         data-tg="tg://resolve?domain=web3Chicken_brother"
-       >
-         @web3Chicken_brother
-       </a>
-     </div>
-
+      <div class="kicker">
+        欢迎来到鸡哥的世界，有不懂的请电报联系我：
+        <a
+          id="tgLink"
+          href="https://t.me/web3Chicken_brother"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-tg="tg://resolve?domain=web3Chicken_brother"
+        >
+          @web3Chicken_brother
+        </a>
+      </div>
 
       <p>
         打开交易所的时候请关闭VPN访问，打开机场的时候请打开VPN访问
@@ -658,7 +609,6 @@
 
       <div class="heroVisual" aria-label="链接展示方框（支持多链接跳转）">
         <div class="glowLine" aria-hidden="true"></div>
-       
 
         <div class="linkPanel" aria-label="图文链接面板">
           <div class="linkPanelHead">
@@ -695,7 +645,7 @@
 
               <!-- Link Tile 2 -->
               <a class="linkTile" href="https://accounts.bmwweb.academy/register?ref=BNB886666" target="_blank" rel="noopener noreferrer">
-                <img class="coverImg" src="IMG_6266.jpg" alt="示例网站 2 封面">
+                <img class="coverImg" src="IMG_6266.jpg" alt="币安交易所 封面">
                 <div class="tileMeta">
                   <div class="tileTop">
                     <h3 class="tileTitle">币安交易所注册下载</h3>
@@ -717,7 +667,7 @@
 
               <!-- Link Tile 3 -->
               <a class="linkTile" href="https://www.ouxyi.link/ul/a2sEcY?channelId=82567043" target="_blank" rel="noopener noreferrer">
-                <img class="coverImg" src="IMG_6275.jpg" alt="示例网站 3 封面">
+                <img class="coverImg" src="IMG_6275.jpg" alt="欧易交易所 封面">
                 <div class="tileMeta">
                   <div class="tileTop">
                     <h3 class="tileTitle">欧易交易所注册下载</h3>
@@ -737,7 +687,7 @@
                 </div>
               </a>
 
-              <!-- 你要新增更多链接：复制任意一个 <a class="linkTile" ...> 块即可（注意封面图用 coverImg） -->
+              <!-- 你要新增更多链接：复制任意一个 <a class="linkTile"...> 块即可 -->
 
             </div>
           </div>
@@ -792,7 +742,7 @@
     if(closeDrawer) closeDrawer.addEventListener("click", hideDrawer);
     if(drawer) drawer.addEventListener("click", (e) => { if(e.target === drawer) hideDrawer(); });
 
-    // theme toggle (keep dark mode + localStorage)
+    // theme toggle
     (function themeToggle(){
       const btn = document.getElementById("themeBtn");
       if(!btn) return;
@@ -819,29 +769,24 @@
         toast(`已切换到 ${root.getAttribute("data-theme")} 模式`);
       });
     })();
-	// Prefer web first. Only fallback to Telegram App when the browser blocks opening the web page.
-	(function setupTelegramLink(){
-	  const a = document.getElementById("tgLink");
-	  if(!a) return;
-	
-	  const tgScheme = a.getAttribute("data-tg");  // tg://resolve?domain=...
-	  const httpsUrl  = a.getAttribute("href");    // https://t.me/...
-	
-	  a.addEventListener("click", (e) => {
-	    e.preventDefault();
-	
-	    // 1) Always try web first (new tab). This works for users without Telegram installed.
-	    const w = window.open(httpsUrl, "_blank", "noopener,noreferrer");
-	
-	    // 2) If popup/new-tab was blocked, fallback to app deep link.
-	    //    (Only happens in strict browsers / settings; doesn't disturb normal web opening.)
-	    if(!w){
-	      window.location.href = tgScheme;
-	    }
-	  }, { passive: false });
-	})();
 
+    // Prefer web first. Only fallback to Telegram App when the browser blocks opening the web page.
+    (function setupTelegramLink(){
+      const a = document.getElementById("tgLink");
+      if(!a) return;
 
+      const tgScheme = a.getAttribute("data-tg");
+      const httpsUrl  = a.getAttribute("href");
+
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const w = window.open(httpsUrl, "_blank", "noopener,noreferrer");
+        if(!w){
+          window.location.href = tgScheme;
+        }
+      }, { passive: false });
+    })();
   </script>
 </body>
 </html>
