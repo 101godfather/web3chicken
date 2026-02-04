@@ -1804,11 +1804,10 @@
       const saved = localStorage.getItem(KEY);
       if(saved){
         apply(saved);
-      }else{
-        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        apply(prefersDark ? "dark" : "light");
-      }
-
+     }else{
+  apply("dark"); // 强制默认 dark
+     } 
+      
       btn.addEventListener("click", () => {
         const now = root.getAttribute("data-theme") || "light";
         apply(now === "dark" ? "light" : "dark");
